@@ -25,7 +25,7 @@ itemButton = document.getElementById("itemButton");
  */
 userButton.addEventListener("click", () => {
   // makes the post request to the correct url
-  let curUrl = "/add/user/";
+  let curUrl = "http://157.230.181.102/add/user/";
   let curData = {
     username: newUsername.value,
     password: newPassword.value
@@ -44,7 +44,7 @@ itemButton.addEventListener("click", () => {
   if (curUsername == "") {
     curUsername = "noUsernameGiven";
   }
-  let curUrl = "/add/item/" + curUsername;
+  let curUrl = "http://157.230.181.102/add/item/" + curUsername;
   let curData = {
     title: title.value,
     description: description.value,
