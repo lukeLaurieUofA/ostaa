@@ -1,0 +1,70 @@
+<!--
+This will create the html portion of the website which
+displays the add user and add item sections in which
+the user can select.
+Author: Luke Laurie
+Date: 3/21/2023
+ -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Osta</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <!-- The Add User Section -->
+    <div id="addUserSection">
+      <h1 class="addIntro">Add User</h1>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="username">Username</label>
+        <input class="userInput" type="text" name="username" id="username">
+      </div>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="password">Password</label>
+        <input class="userInput" type="text" name="username" id="password">
+      </div>
+
+      <button type="button" name="button" class="selectionButton" id="userButton">Add User</button>
+    </div>
+    <!-- The section to add a specific item -->
+    <div id="addItemSection">
+      <h1 class="addIntro">Add Item</h1>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="title">Title</label>
+        <input class="userInput" type="text" name="title" id="title">
+      </div>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="description">Desc</label>
+        <input class="userInput" type="text" name="description" id="description">
+      </div>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="image">Image</label>
+        <input class="userInput" type="text" name="image" id="image">
+      </div>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="price">Price</label>
+        <input class="userInput" type="text" name="price" id="price">
+      </div>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="stauts">Status</label>
+        <input class="userInput" type="text" name="curStatus" id="curStatus">
+      </div>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="loginUsername">Username</label>
+        <input class="userInput" type="text" name="loginUsername" id="loginUsername">
+      </div>
+
+      <button type="button" name="button" class="selectionButton" id="itemButton">Add Item</button>
+    </div>
+    <script src="frontend.js"></script>
+  </body>
+</html>
