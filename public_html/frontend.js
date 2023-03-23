@@ -69,5 +69,10 @@ function postRequest(url, data) {
     headers: {
       "Content-Type": "application/JSON "
     }
-  });
+  })
+  .then(() => {
+    console.log("success");
+  }).catch (() => {
+    console.log("error");
+  })
 }
