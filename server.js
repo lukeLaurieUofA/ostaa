@@ -9,11 +9,13 @@
  */
 const express = require("express");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
 app.use(express.static("public_html"));
 app.use(express.json());
+app.use(cookieParser());
 
 
 const Item = require("./Item.js");
@@ -167,6 +169,27 @@ app.post("/add/item/:USERNAME", (req, res) => {
       console.log("error");
       res.send("Error");
     })
+});
+
+/*
+ * This is the code that gets ran whenever the client
+ * makes a post request to the server at the url, in order
+ * to check if a user exists in the db.
+ * @param {Object} req is the information about the request.
+ * @param {Object} res the responce sent back to the user.
+ */
+app.post("/valid/user/", (req, res) => {
+  let curUsername = req.body.username; 
+  let curPassword = req.body.password; 
+  // searches for a user wuth the login credentials 
+  User.findOne({username: curUsername, password: curPassword})
+    .then((data) => { 
+      if (data == null) {
+        res.send("fail");
+      } else { 
+        res.send("success");
+      }
+    });
 });
 
 /*

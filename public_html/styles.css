@@ -5,6 +5,99 @@ index.html page.
 Author: Luke Laurie
 Date: 3/21/2023
  */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background-color: rgb(136, 220, 248);
+}
+/* login/register page */
+#userCreation {
+  margin: 2% 4% 4% 4%;
+}
+#loginSection {
+  margin-bottom: 10%;
+}
+.mainTitle {
+  color: rgb(0, 0, 178);
+  font-size: 3rem;
+}
+
 .inputArea {
-  margin: 1% 0;
+  margin: 4% 0;
+}
+
+#invalaidLogin {
+  color: red;
+  display: none;
+}
+
+/* The main home page */
+#mainContainer {
+  background-color: rgb(175, 244, 175);
+}
+
+#userOptions,
+#itemSection {
+  background-color: rgb(175, 244, 175);
+  border-top: 3px solid gray;
+  border-bottom: 3px solid gray;
+  border-left: 3px solid gray;
+  box-sizing: border-box;
+  float: left;
+  width: 50%;
+  height: calc(100% - 11%);
+  padding: 0 8%;
+  overflow-y: scroll;
+}
+
+.loginPage {
+  margin: 2% 8%;
+}
+
+#itemSection {
+  border-right: 3px solid gray;
+}
+
+.itemStarter {
+  margin: 15% 0;
+}
+
+/* Item styling */
+.item {
+  border: 1px solid black;
+  margin: 3% 0;
+  padding: 1%;
+}
+
+.itemName {
+  margin: 3% 0;
+  font-size: 2rem; 
+  font-weight: bold;
+}
+
+.itemImage {
+  height: 200px;
+}
+
+.itemDescription {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.3rem;
+}
+
+/* Post an item page */
+#addItemSection {
+  padding: 0 3%;
+}
+
+.postTitle {
+  margin: 2% 3%;
+}
+
+.postIntro {
+  font-size: 2rem;
+}
+
+.imageSelect {
+  margin-right: 7%;
 }

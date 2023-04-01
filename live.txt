@@ -1,0 +1,4 @@
+http://157.230.181.102
+
+To access different paths: 
+http://157.230.181.102/get/users/

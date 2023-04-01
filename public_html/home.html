@@ -1,0 +1,58 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1 class="mainTitle loginPage">Ostaa</h1>
+    <!-- Container for bother divs -->
+    <div id="itemContainer">
+      <!-- User options section -->
+      <div id="userOptions">
+        <h2 class="subTitle">Welcome xxxx! What would you like to do?</h2>
+        <div class="itemStarter">
+          <input type="text" class="userInput" id="listingSearch" />
+          <button type="button" class="selectionButton" id="sublistingButton">
+            Search Listings
+          </button>
+        </div>
+        <div class="itemStarter">
+          <button type="button" class="selectionButton" id="listingButton">
+            View your Listings
+          </button>
+        </div>
+        <div class="itemStarter">
+          <button type="button" class="selectionButton" id="purchaseButton">
+            View your Purchases
+          </button>
+        </div>
+        <div class="itemStarter">
+          <button type="button" class="selectionButton" id="createButton">
+            Create a Listing
+          </button>
+        </div>
+      </div>
+      <!-- Items Section -->
+      <div id="itemSection">
+        <!-- use to append child later -->
+        <div class="item">
+          <h3 class="itemName">name</h3>
+          <img class="itemImage" src="images/tape.jpg" alt="tape image" />
+          <p class="itemDescription">Item Description</p>
+          <p class="itemDescription">Item Price</p>
+          <button type="button" class="buyButton">Buy Now!</button>
+        </div>
+        <div class="item">
+            <h3 class="itemName">name</h3>
+            <img class="itemImage" src="images/tape.jpg" alt="tape image" />
+            <p class="itemDescription">Item Description</p>
+            <p class="itemDescription">Item Price</p>
+            <button type="button" class="buyButton">Buy Now!</button>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

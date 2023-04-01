@@ -1,70 +1,73 @@
-<!--
-This will create the html portion of the website which
-displays the add user and add item sections in which
-the user can select.
-Author: Luke Laurie
-Date: 3/21/2023
- -->
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>Osta</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <!-- The Add User Section -->
-    <div id="addUserSection">
-      <h1 class="addIntro">Add User</h1>
+    <div id="userCreation">
+      <h1 class="mainTitle">Ostaa</h1>
+      <!-- Login Section -->
+      <div id="loginSection">
+        <h1 class="mainTitle">Login</h1>
 
-      <div class="inputArea">
-        <label class="inputLabel" for="username">Username</label>
-        <input class="userInput" type="text" name="username" id="username">
+        <div class="inputArea">
+          <label class="inputLabel" for="usernameLogin">Username</label>
+          <input
+            class="userInput"
+            type="text"
+            name="username"
+            id="usernameLogin"
+          />
+        </div>
+
+        <div class="inputArea">
+          <label class="inputLabel" for="passwordLogin">Password</label>
+          <input
+            class="userInput"
+            type="text"
+            name="username"
+            id="passwordLogin"
+          />
+        </div>
+
+        <button type="button" class="selectionButton" id="loginButton">
+          Login
+        </button>
+        <!-- Displayed whenever invalid login -->
+        <h2 id="invalaidLogin">Issue logging in with that info.</h2>
       </div>
+      <!-- Create Account Section -->
+      <div id="registerSection">
+        <h1 class="mainTitle">Create Account</h1>
 
-      <div class="inputArea">
-        <label class="inputLabel" for="password">Password</label>
-        <input class="userInput" type="text" name="username" id="password">
+        <div class="inputArea">
+          <label class="inputLabel" for="usernameRegister">Username</label>
+          <input
+            class="userInput"
+            type="text"
+            name="username"
+            id="usernameRegister"
+          />
+        </div>
+
+        <div class="inputArea">
+          <label class="inputLabel" for="passwordRegister">Password</label>
+          <input
+            class="userInput"
+            type="text"
+            name="username"
+            id="passwordRegister"
+          />
+        </div>
+
+        <button type="button" class="selectionButton" id="registerButton">
+          Create
+        </button>
       </div>
-
-      <button type="button" name="button" class="selectionButton" id="userButton">Add User</button>
     </div>
-    <!-- The section to add a specific item -->
-    <div id="addItemSection">
-      <h1 class="addIntro">Add Item</h1>
-
-      <div class="inputArea">
-        <label class="inputLabel" for="title">Title</label>
-        <input class="userInput" type="text" name="title" id="title">
-      </div>
-
-      <div class="inputArea">
-        <label class="inputLabel" for="description">Desc</label>
-        <input class="userInput" type="text" name="description" id="description">
-      </div>
-
-      <div class="inputArea">
-        <label class="inputLabel" for="image">Image</label>
-        <input class="userInput" type="text" name="image" id="image">
-      </div>
-
-      <div class="inputArea">
-        <label class="inputLabel" for="price">Price</label>
-        <input class="userInput" type="text" name="price" id="price">
-      </div>
-
-      <div class="inputArea">
-        <label class="inputLabel" for="curStatus">Status</label>
-        <input class="userInput" type="text" name="curStatus" id="curStatus">
-      </div>
-
-      <div class="inputArea">
-        <label class="inputLabel" for="loginUsername">Username</label>
-        <input class="userInput" type="text" name="loginUsername" id="loginUsername">
-      </div>
-
-      <button type="button" name="button" class="selectionButton" id="itemButton">Add Item</button>
-    </div>
-    <script src="frontend.js"></script>
+    <script src="login.js"></script>
   </body>
 </html>
