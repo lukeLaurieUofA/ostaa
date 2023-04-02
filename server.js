@@ -18,8 +18,13 @@ app.use(express.json());
 app.use(cookieParser());
 
 
+app.use('/app/*', authenticate);
+
+
 const Item = require("./Item.js");
 const User = require("./User.js");
+
+sessions = {};
 
 mongoose.connect("mongodb://127.0.0.1/ostaa")
 
@@ -31,6 +36,10 @@ mongoose.connect("mongodb://127.0.0.1/ostaa")
  */
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public_html/index.html");
+});
+
+app.get("/app/home", (req, res) => {
+  res.send("success");
 });
 
 /*
@@ -182,15 +191,58 @@ app.post("/valid/user/", (req, res) => {
   let curUsername = req.body.username; 
   let curPassword = req.body.password; 
   // searches for a user wuth the login credentials 
+
+  // look for cookies here
+
   User.findOne({username: curUsername, password: curPassword})
     .then((data) => { 
       if (data == null) {
         res.send("fail");
       } else { 
-        res.send("success");
+        // creates the cookie
+        let id = addSession(curUsername);
+        res.cookie('login', {sessionId: id, user: curUsername}, { maxAge: 5000, httpOnly: true }); 
+        res.redirect("/app/home")
       }
     });
 });
+
+function addSession(user) {
+  let sessionId = Math.floor(Math.random() * 100000); 
+  let sessionStart = Date.now();
+  sessions[user] = {'sid': sessionId, "start": sessionStart};
+  return sessionId;
+}
+
+function hasSession(user, sessionId) {
+  let entry = sessions[user]; 
+  if (entry != undefined) {
+    return entry.sid == sessionId
+  }
+  return false;
+}
+
+function cleanupSessions() {
+  let curTime = Date.now(); 
+  for (i in sessions) {
+    let curSession = sessions[i];
+    if (curSession.start + 20000 < curTime) {
+     delete sessions[i];
+    }
+  }
+}
+
+setInterval(cleanupSessions, 2000);
+
+function authenticate(req, res, next) {
+  let curCookie = req.cookies.login; 
+  console.log(curCookie);
+  if (curCookie){
+    next(); 
+    return ;
+  }
+  res.send("not found");
+}
 
 /*
  * This is the code that gets ran whenever the client

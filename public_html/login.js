@@ -14,6 +14,8 @@ registerPassword = document.getElementById("passwordRegister");
 loginButton = document.getElementById("loginButton");
 registerButton = document.getElementById("registerButton");
 invalidText = document.getElementById("invalaidLogin");
+container = document.getElementById("userCreation");
+
 
 /*
  * The event listener on the register button which will make
@@ -65,13 +67,28 @@ function postRequest(url, data, isLogin) {
     }).then((responce) => {
         if (!isLogin) {
             alert("User Created!");
-        } else if (responce == "success") { 
-            window.location.href = "home.html";
-        } else { 
+        } else if (responce == "fail") { 
             invalidText.style.display = "block";
+        } else { 
+          window.location.href = "home.html";
         }
     })
     .catch(() => {
       console.log("error");
     });
 }
+
+function hasCookies() {
+  let url = "http://localhost:80/app/home";
+  fetch(url) 
+    .then(data => {
+      return data.text();
+    })
+    .then(responce => {
+      if (responce == "success") {
+        window.location.href = "home.html";
+      }
+    })
+}
+
+hasCookies();
