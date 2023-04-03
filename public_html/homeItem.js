@@ -93,9 +93,9 @@ function displayItems(items, listType) {
     itemContainer.appendChild(itemImage);
     itemContainer.appendChild(itemDescription);
     itemContainer.appendChild(itemPrice);
-    console.log(listType);
     if (listType == "search") {
-      if (itemStatus.innerText == "Item has been purchased") {
+      if (itemStatus.innerText == "SOLD") {
+        itemStatus.innerText = "Item has been purchased";
         itemContainer.appendChild(itemStatus);
       } else {
         itemContainer.appendChild(itemButton);
@@ -104,7 +104,6 @@ function displayItems(items, listType) {
     } else if (listType == "listings") {
         itemContainer.appendChild(itemStatus);
     } else {
-        itemStatus.innerText = "SOLD";
         itemContainer.appendChild(itemStatus);
     }
     itemSection.appendChild(itemContainer);
@@ -118,7 +117,6 @@ function findCurUser() {
       return data.text();
     })
     .then((responce) => {
-      console.log(responce);
       // sends back to main page if not found
       if (responce == "not found") {
         window.location.href = "index.html";

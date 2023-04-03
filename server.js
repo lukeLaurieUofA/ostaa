@@ -17,16 +17,14 @@ app.use(express.static("public_html"));
 app.use(express.json());
 app.use(cookieParser());
 
-
-app.use('/app/*', authenticate);
-
+app.use("/app/*", authenticate);
 
 const Item = require("./Item.js");
 const User = require("./User.js");
 
 sessions = {};
 
-mongoose.connect("mongodb://127.0.0.1/ostaa")
+mongoose.connect("mongodb://127.0.0.1/ostaa");
 
 /*
  * This is the code that gets ran whenever the user
@@ -120,24 +118,25 @@ app.post("/add/user/", (req, res) => {
     username: userData.username,
     password: userData.password,
     listings: [],
-    purchases: []
+    purchases: [],
   });
   User.findOne({
-      username: userData.username
-    })
-    .then(responce => {
-      if (responce) {
-        res.send("Account already exists");
-      } else {
-        // saves the new user
-        newUser.save()
-          .then(() => {
-            res.send("Success");
-          }).catch(err => {
-            res.send("Error");
-          });
-      }
-    })
+    username: userData.username,
+  }).then((responce) => {
+    if (responce) {
+      res.send("Account already exists");
+    } else {
+      // saves the new user
+      newUser
+        .save()
+        .then(() => {
+          res.send("Success");
+        })
+        .catch((err) => {
+          res.send("Error");
+        });
+    }
+  });
 });
 
 /*
@@ -156,27 +155,27 @@ app.post("/add/item/:USERNAME", (req, res) => {
     description: userData.description,
     image: userData.image,
     price: userData.price,
-    stat: userData.stat
+    stat: userData.stat,
   });
   User.findOne({
-      username: curUsername
-    })
-    .then(result => {
+    username: curUsername,
+  })
+    .then((result) => {
       // checks if the username exists
       if (result) {
-        newItem.save()
-          .then(() => {
-            // adds the value to the existing array
-            result.listings.push(newItem._id);
-            result.save();
-            res.send("success");
-          });
+        newItem.save().then(() => {
+          // adds the value to the existing array
+          result.listings.push(newItem._id);
+          result.save();
+          res.send("success");
+        });
       } else {
         res.send("invalid username");
       }
-    }).catch(err => {
-      res.send("Error");
     })
+    .catch((err) => {
+      res.send("Error");
+    });
 });
 
 /*
@@ -187,24 +186,29 @@ app.post("/add/item/:USERNAME", (req, res) => {
  * @param {Object} res the responce sent back to the user.
  */
 app.post("/valid/user/", (req, res) => {
-  let curUsername = req.body.username; 
-  let curPassword = req.body.password; 
-  // searches for a user wuth the login credentials 
+  let curUsername = req.body.username;
+  let curPassword = req.body.password;
+  // searches for a user wuth the login credentials
 
   // look for cookies here
 
-  User.findOne({username: curUsername, password: curPassword})
-    .then((data) => { 
+  User.findOne({ username: curUsername, password: curPassword }).then(
+    (data) => {
       if (data == null) {
         res.send("fail");
-      } else { 
+      } else {
         // creates the cookie
         let id = addSession(curUsername);
         // has login for 5 minutes
-        res.cookie('login', {sessionId: id, user: curUsername}, { maxAge: 300000, httpOnly: true }); 
-        res.redirect("/app/home")
+        res.cookie(
+          "login",
+          { sessionId: id, user: curUsername },
+          { maxAge: 300000, httpOnly: true }
+        );
+        res.redirect("/app/home");
       }
-    });
+    }
+  );
 });
 
 /*
@@ -215,50 +219,55 @@ app.post("/valid/user/", (req, res) => {
  * @param {Object} res the responce sent back to the user.
  */
 app.post("/buy/item/:USERNAME", (req, res) => {
-  let curUsername = req.params.USERNAME; 
-  User.findOne({username: curUsername})
-    .then((data) => { 
-      if (data == null) {
-        res.send("fail");
-      } else { 
-        // adds the value to the existing array
-        data.purchases.push(req.body._id);
-        data.save();
+  let curUsername = req.params.USERNAME;
+  User.findOne({ username: curUsername }).then((data) => {
+    if (data == null) {
+      res.send("fail");
+    } else {
+      let curItem = req.body;
+      // adds the value to the existing array
+      data.purchases.push(curItem._id);
+      data.save();
+      // changes the status
+      Item.findOne({ _id: curItem._id }).then((foundItem) => {
+        foundItem.stat = "SOLD";
+        foundItem.save();
         res.send("success");
-      }
-    });
+      });
+    }
+  });
 });
 
 app.get("/get/current/user", (req, res) => {
-  let curCookie = req.cookies.login; 
-  if (curCookie){
-    res.send(curCookie.user); 
-    return ;
+  let curCookie = req.cookies.login;
+  if (curCookie) {
+    res.send(curCookie.user);
+    return;
   }
   res.send("not found");
 });
 
 function addSession(user) {
-  let sessionId = Math.floor(Math.random() * 100000); 
+  let sessionId = Math.floor(Math.random() * 100000);
   let sessionStart = Date.now();
-  sessions[user] = {'sid': sessionId, "start": sessionStart};
+  sessions[user] = { sid: sessionId, start: sessionStart };
   return sessionId;
 }
 
 function hasSession(user, sessionId) {
-  let entry = sessions[user]; 
+  let entry = sessions[user];
   if (entry != undefined) {
-    return entry.sid == sessionId
+    return entry.sid == sessionId;
   }
   return false;
 }
 
 function cleanupSessions() {
-  let curTime = Date.now(); 
+  let curTime = Date.now();
   for (i in sessions) {
     let curSession = sessions[i];
     if (curSession.start + 300000 < curTime) {
-     delete sessions[i];
+      delete sessions[i];
     }
   }
 }
@@ -266,11 +275,11 @@ function cleanupSessions() {
 setInterval(cleanupSessions, 2000);
 
 function authenticate(req, res, next) {
-  let curCookie = req.cookies.login; 
-  if (curCookie){
+  let curCookie = req.cookies.login;
+  if (curCookie) {
     var result = hasSession(curCookie.user, curCookie.sessionId);
     if (result) {
-      next(); 
+      next();
       return;
     }
   }
@@ -286,17 +295,16 @@ function authenticate(req, res, next) {
  */
 app.delete("/everything", (req, res) => {
   // deletes all users
-  User.deleteMany({})
-    .then(() => {
-      // deletes all items
-      Item.deleteMany({})
-        .then(() => {
-          res.send("success");
-        })
-        .catch((err) => {
-          res.send(err);
-        })
-    })
+  User.deleteMany({}).then(() => {
+    // deletes all items
+    Item.deleteMany({})
+      .then(() => {
+        res.send("success");
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  });
 });
 
 /*
@@ -312,10 +320,12 @@ function getEverything(displayVals, res) {
     var curDisplay = Item;
   }
   // finds all users
-  curDisplay.find({})
+  curDisplay
+    .find({})
     .then((responce) => {
       res.send(responce);
-    }).catch(err => {
+    })
+    .catch((err) => {
       res.send(err);
     });
 }
@@ -330,8 +340,8 @@ function getEverything(displayVals, res) {
 function getAllArrays(displayVals, username, res) {
   // finds user with correct username
   User.findOne({
-      username: username
-    })
+    username: username,
+  })
     .then((responce) => {
       // checks if username exists
       if (responce) {
@@ -344,17 +354,18 @@ function getAllArrays(displayVals, username, res) {
       } else {
         res.send("invalid username");
       }
-    }).catch(err => {
+    })
+    .catch((err) => {
       res.send(err);
     });
 }
 
 async function getItemsById(itemsIds, res) {
-  var items = []
-  for (i in itemsIds) { 
-    // find the item with the id 
-    var curId = itemsIds[i]; 
-    const foundItem = await Item.findOne({_id: curId}); 
+  var items = [];
+  for (i in itemsIds) {
+    // find the item with the id
+    var curId = itemsIds[i];
+    const foundItem = await Item.findOne({ _id: curId });
     items.push(foundItem);
   }
   res.send(items);
@@ -378,10 +389,13 @@ function getBySubstring(displayVals, subValue, res) {
     var searchVal = "description";
   }
   // searches for all words with the correct substring
-  curDisplay.where(searchVal).regex(subValue)
+  curDisplay
+    .where(searchVal)
+    .regex(subValue)
     .then((responce) => {
       res.send(responce);
-    }).catch(err => {
+    })
+    .catch((err) => {
       res.send(err);
     });
 }
