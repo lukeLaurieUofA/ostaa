@@ -22,36 +22,39 @@ findCurUser();
  * item to be added.
  */
 createButton.addEventListener("click", () => {
-  // saves image to db 
+  // saves image to db
   const formData = new FormData();
   const fileInput = document.querySelector('input[type="file"]');
-  formData.append('image', fileInput.files[0]);
-  fetch('/upload', {
-    method: 'POST',
-    body: formData
+  formData.append("image", fileInput.files[0]);
+  fetch("/upload", {
+    method: "POST",
+    body: formData,
   })
-  .then(responce => {
-    return responce.json();
-  }).then(data => {
-    // gets the file name for the image
-    var url = data.imageUrl.split("\\");
-    url = url[url.length - 1];
-    // makes the post request to the correct url
-  let curUrl = "/add/item/" + username;
-  let curData = {
-    title: curTitle.value,
-    description: curDescription.value,
-    image: url,
-    price: curPrice.value,
-    stat: curStatus.value,
-  };
-  postRequest(curUrl, curData);
-  })
-  .catch(error => {
-    console.error('Error uploading image:', error);
-  });
+    .then((responce) => {
+      console.log("with responce");
+      return responce.json();
+    })
+    .then((data) => {
+      console.log("with url");
+      // gets the file name for the image
+      var url = data.imageUrl.split("\\");
+      url = url[url.length - 1];
+      // makes the post request to the correct url
+      let curUrl = "/add/item/" + username;
+      let curData = {
+        title: curTitle.value,
+        description: curDescription.value,
+        image: url,
+        price: curPrice.value,
+        stat: curStatus.value,
+      };
+      postRequest(curUrl, curData);
+    })
+    .catch((error) => {
+      console.error("Error uploading image:", error);
+    });
   // sends back to main page
-  window.location.href = "home.html";
+  // window.location.href = "home.html";
 });
 
 /*
