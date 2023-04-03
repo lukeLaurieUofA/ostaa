@@ -1,41 +1,54 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <title>Post Item</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1 class="mainTitle postTitle" postTitle>Ostaa</h1>
     <!-- The section to add a specific item -->
     <div id="addItemSection">
-        <h1 class="postIntro">Add a Post</h1>
-  
-        <div class="inputArea">
-          <label class="inputLabel" for="title">Title</label>
-          <input class="userInput" type="text" name="title" id="title">
-        </div>
-  
-        <div class="inputArea">
-          <label class="inputLabel" for="description">Desc</label>
-          <input class="userInput" type="text" name="description" id="description">
-        </div>
-  
-        <div class="inputArea">
-          <label class="inputLabel" for="price">Price</label>
-          <input class="userInput" type="text" name="price" id="price">
-        </div>
-  
-        <div class="inputArea">
-          <label class="inputLabel" for="curStatus">Status</label>
-          <input class="userInput" type="text" name="curStatus" id="curStatus">
-        </div>
+      <h1 class="postIntro">Add a Post</h1>
 
-        <div class="inputArea">
-            <input type="file" accept="image/*" class="imageSelect">
-            <button type="button" name="button" class="selectionButton" id="postButton">Create Post</button>
-          </div>
+      <div class="inputArea">
+        <label class="inputLabel" for="title">Title</label>
+        <input class="userInput" type="text" name="title" id="title" />
       </div>
-</body>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="description">Desc</label>
+        <input
+          class="userInput"
+          type="text"
+          name="description"
+          id="description"
+        />
+      </div>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="price">Price</label>
+        <input class="userInput" type="number" name="price" id="price" />
+      </div>
+
+      <div class="inputArea">
+        <label class="inputLabel" for="curStatus">Status</label>
+        <input class="userInput" type="text" name="curStatus" id="curStatus" />
+      </div>
+
+      <div class="inputArea">
+        <input type="file" accept="image/*" class="imageSelect" id="image"/>
+        <button
+          type="button"
+          name="button"
+          class="selectionButton"
+          id="postButton"
+        >
+          Create Post
+        </button>
+      </div>
+    </div>
+    <script src="newItem.js"></script>
+  </body>
 </html>

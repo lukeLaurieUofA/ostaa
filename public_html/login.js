@@ -70,6 +70,7 @@ function postRequest(url, data, isLogin) {
         } else if (responce == "fail") { 
             invalidText.style.display = "block";
         } else { 
+          console.log("here");
           window.location.href = "home.html";
         }
     })
@@ -86,6 +87,7 @@ function hasCookies() {
     })
     .then(responce => {
       if (responce == "success") {
+        console.log("here??");
         window.location.href = "home.html";
       }
     })

@@ -167,15 +167,14 @@ app.post("/add/item/:USERNAME", (req, res) => {
         newItem.save()
           .then(() => {
             // adds the value to the existing array
-            result.purchases.push(newItem._id);
+            result.listings.push(newItem._id);
             result.save();
-            res.send("success")
+            res.send("success");
           });
       } else {
         res.send("invalid username");
       }
     }).catch(err => {
-      console.log("error");
       res.send("Error");
     })
 });
@@ -201,10 +200,42 @@ app.post("/valid/user/", (req, res) => {
       } else { 
         // creates the cookie
         let id = addSession(curUsername);
-        res.cookie('login', {sessionId: id, user: curUsername}, { maxAge: 5000, httpOnly: true }); 
+        // has login for 5 minutes
+        res.cookie('login', {sessionId: id, user: curUsername}, { maxAge: 300000, httpOnly: true }); 
         res.redirect("/app/home")
       }
     });
+});
+
+/*
+ * This is the code that gets ran whenever the client
+ * makes a post request to the server at the url, in order
+ * to add a new item to a user.
+ * @param {Object} req is the information about the request.
+ * @param {Object} res the responce sent back to the user.
+ */
+app.post("/buy/item/:USERNAME", (req, res) => {
+  let curUsername = req.params.USERNAME; 
+  User.findOne({username: curUsername})
+    .then((data) => { 
+      if (data == null) {
+        res.send("fail");
+      } else { 
+        // adds the value to the existing array
+        data.purchases.push(req.body._id);
+        data.save();
+        res.send("success");
+      }
+    });
+});
+
+app.get("/get/current/user", (req, res) => {
+  let curCookie = req.cookies.login; 
+  if (curCookie){
+    res.send(curCookie.user); 
+    return ;
+  }
+  res.send("not found");
 });
 
 function addSession(user) {
@@ -226,7 +257,7 @@ function cleanupSessions() {
   let curTime = Date.now(); 
   for (i in sessions) {
     let curSession = sessions[i];
-    if (curSession.start + 20000 < curTime) {
+    if (curSession.start + 300000 < curTime) {
      delete sessions[i];
     }
   }
@@ -236,12 +267,14 @@ setInterval(cleanupSessions, 2000);
 
 function authenticate(req, res, next) {
   let curCookie = req.cookies.login; 
-  console.log(curCookie);
   if (curCookie){
-    next(); 
-    return ;
+    var result = hasSession(curCookie.user, curCookie.sessionId);
+    if (result) {
+      next(); 
+      return;
+    }
   }
-  res.send("not found");
+  res.send("fail");
 }
 
 /*
@@ -304,9 +337,9 @@ function getAllArrays(displayVals, username, res) {
       if (responce) {
         // sends back the correct data
         if (displayVals == "listings") {
-          res.send(responce.listings);
+          getItemsById(responce.listings, res);
         } else {
-          res.send(responce.purchases);
+          getItemsById(responce.purchases, res);
         }
       } else {
         res.send("invalid username");
@@ -314,6 +347,17 @@ function getAllArrays(displayVals, username, res) {
     }).catch(err => {
       res.send(err);
     });
+}
+
+async function getItemsById(itemsIds, res) {
+  var items = []
+  for (i in itemsIds) { 
+    // find the item with the id 
+    var curId = itemsIds[i]; 
+    const foundItem = await Item.findOne({_id: curId}); 
+    items.push(foundItem);
+  }
+  res.send(items);
 }
 
 /*
