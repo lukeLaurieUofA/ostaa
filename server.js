@@ -306,10 +306,10 @@ app.delete("/everything", (req, res) => {
     // deletes all items
     Item.deleteMany({})
       .then(() => {
-        res.send("success");
+        // res.send("success");
       })
       .catch((err) => {
-        res.send(err);
+        // res.send(err);
       });
   });
 
