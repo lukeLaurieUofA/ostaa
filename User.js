@@ -12,7 +12,7 @@ var userSchema = new Schema({
   username: String,
   password: String,
   listings: [],
-  purchases: []
+  purchases: [],
 });
 
 module.exports = mongoose.model("User", userSchema);

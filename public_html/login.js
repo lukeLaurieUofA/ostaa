@@ -16,7 +16,6 @@ registerButton = document.getElementById("registerButton");
 invalidText = document.getElementById("invalaidLogin");
 container = document.getElementById("userCreation");
 
-
 /*
  * The event listener on the register button which will make
  * a post request to the server with the information about the
@@ -24,7 +23,7 @@ container = document.getElementById("userCreation");
  */
 registerButton.addEventListener("click", () => {
   // makes the post request to the correct url
-  let curUrl = "http://localhost:80/add/user/";
+  let curUrl = "add/user/";
   let curData = {
     username: registerUsername.value,
     password: registerPassword.value,
@@ -39,7 +38,7 @@ registerButton.addEventListener("click", () => {
  */
 loginButton.addEventListener("click", () => {
   // makes the post request to the correct url
-  let curUrl = "http://localhost:80/valid/user/";
+  let curUrl = "valid/user/";
   let curData = {
     username: loginUsername.value,
     password: loginPassword.value,
@@ -64,33 +63,38 @@ function postRequest(url, data, isLogin) {
   })
     .then((data) => {
       return data.text();
-    }).then((responce) => {
-        if (!isLogin) {
-            alert("User Created!");
-        } else if (responce == "fail") { 
-            invalidText.style.display = "block";
-        } else { 
-          console.log("here");
-          window.location.href = "home.html";
-        }
+    })
+    .then((responce) => {
+      if (!isLogin) {
+        alert("User Created!");
+      } else if (responce == "fail") {
+        invalidText.style.display = "block";
+      } else {
+        console.log("here");
+        window.location.href = "home.html";
+      }
     })
     .catch(() => {
       console.log("error");
     });
 }
 
+/*
+ * This will make a get request to the server to check
+ * if the user already has cookies meaning they have
+ * logged in sometime within the last 5 minutes.
+ */
 function hasCookies() {
-  let url = "http://localhost:80/app/home";
-  fetch(url) 
-    .then(data => {
+  let url = "app/home";
+  fetch(url)
+    .then((data) => {
       return data.text();
     })
-    .then(responce => {
+    .then((responce) => {
       if (responce == "success") {
-        console.log("here??");
         window.location.href = "home.html";
       }
-    })
+    });
 }
 
 hasCookies();

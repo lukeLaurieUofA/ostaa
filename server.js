@@ -10,13 +10,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const multer = require("multer");
+const path = require('path');
+const upload = multer({ dest: __dirname + "/uploads/" });
 
 const app = express();
 
 app.use(express.static("public_html"));
 app.use(express.json());
 app.use(cookieParser());
-
 app.use("/app/*", authenticate);
 
 const Item = require("./Item.js");
@@ -36,9 +38,38 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public_html/index.html");
 });
 
+/*
+ * This is the code that gets ran whenever the user
+ * tries to use cookies to authenticate themselves.
+ * @param {Object} req is the information about the request.
+ * @param {Object} res the responce sent back to the user.
+ */
 app.get("/app/home", (req, res) => {
   res.send("success");
 });
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+});
+
+/*
+ * This is the code that gets ran whenever the user
+ * tries to get an image saved to the database.
+ * @param {Object} req is the information about the request.
+ * @param {Object} res the responce sent back to the user.
+ */
+app.get('/uploads/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const filepath = path.join(__dirname, 'uploads', filename);
+  res.sendFile(filepath);
+});
+
+
 
 /*
  * This is the code that gets ran whenever the client
@@ -238,53 +269,16 @@ app.post("/buy/item/:USERNAME", (req, res) => {
   });
 });
 
-app.get("/get/current/user", (req, res) => {
-  let curCookie = req.cookies.login;
-  if (curCookie) {
-    res.send(curCookie.user);
-    return;
-  }
-  res.send("not found");
+/*
+ * This will upload the users selected image.
+ * @param {Object} req is the information about the request.
+ * @param {Object} res the responce sent back to the user.
+ * @param {Object} The function to be ran if cookie is valid.
+ */
+app.post("/upload", upload.single("image"), (req, res) => {
+  const imageUrl = `http://157.230.181.102/${req.file.path}`;
+  res.json({ imageUrl: imageUrl });
 });
-
-function addSession(user) {
-  let sessionId = Math.floor(Math.random() * 100000);
-  let sessionStart = Date.now();
-  sessions[user] = { sid: sessionId, start: sessionStart };
-  return sessionId;
-}
-
-function hasSession(user, sessionId) {
-  let entry = sessions[user];
-  if (entry != undefined) {
-    return entry.sid == sessionId;
-  }
-  return false;
-}
-
-function cleanupSessions() {
-  let curTime = Date.now();
-  for (i in sessions) {
-    let curSession = sessions[i];
-    if (curSession.start + 300000 < curTime) {
-      delete sessions[i];
-    }
-  }
-}
-
-setInterval(cleanupSessions, 2000);
-
-function authenticate(req, res, next) {
-  let curCookie = req.cookies.login;
-  if (curCookie) {
-    var result = hasSession(curCookie.user, curCookie.sessionId);
-    if (result) {
-      next();
-      return;
-    }
-  }
-  res.send("fail");
-}
 
 /*
  * This is the code that gets ran whenever the client
@@ -360,17 +354,6 @@ function getAllArrays(displayVals, username, res) {
     });
 }
 
-async function getItemsById(itemsIds, res) {
-  var items = [];
-  for (i in itemsIds) {
-    // find the item with the id
-    var curId = itemsIds[i];
-    const foundItem = await Item.findOne({ _id: curId });
-    items.push(foundItem);
-  }
-  res.send(items);
-}
-
 /*
  * This will get every item in either the items or the users
  * to be sent back to the user based on if the input is a substring
@@ -399,6 +382,103 @@ function getBySubstring(displayVals, subValue, res) {
       res.send(err);
     });
 }
+
+/*
+ * This is the code that gets ran whenever the client
+ * makes a get request to the server at the url, which
+ * finds the user associated with the current cookie.
+ * @param {Object} req is the information about the request.
+ * @param {Object} res the responce sent back to the user.
+ */
+app.get("/get/current/user", (req, res) => {
+  let curCookie = req.cookies.login;
+  if (curCookie) {
+    res.send(curCookie.user);
+    return;
+  }
+  res.send("not found");
+});
+
+/*
+ * This will generate a random number for a cookies id, then
+ * it will save the cookies information in an Object.
+ * makes a get request to the server at the url.
+ * @param {String} user is a String representing the username.
+ */
+function addSession(user) {
+  let sessionId = Math.floor(Math.random() * 100000);
+  let sessionStart = Date.now();
+  sessions[user] = { sid: sessionId, start: sessionStart };
+  return sessionId;
+}
+
+/*
+ * This will check if a current cookie still exists inside of
+ * the Object.
+ * @param {String} user is a String representing the username.
+ * @param {Number} sessionId is the id associated with the cookie.
+ */
+function hasSession(user, sessionId) {
+  let entry = sessions[user];
+  if (entry != undefined) {
+    return entry.sid == sessionId;
+  }
+  return false;
+}
+
+/*
+ * This will run every two seconds and check if a cookies time
+ * has expired and if it has, then it will remove it from the
+ * Object.
+ */
+function cleanupSessions() {
+  let curTime = Date.now();
+  for (i in sessions) {
+    let curSession = sessions[i];
+    // checks if cookie should be removed
+    if (curSession.start + 300000 < curTime) {
+      delete sessions[i];
+    }
+  }
+}
+
+/*
+ * This will check if the user can be validated with cookies.
+ * @param {Object} req is the information about the request.
+ * @param {Object} res the responce sent back to the user.
+ * @param {Object} The function to be ran if cookie is valid.
+ */
+function authenticate(req, res, next) {
+  let curCookie = req.cookies.login;
+  if (curCookie) {
+    // checks if the cookie exists
+    var result = hasSession(curCookie.user, curCookie.sessionId);
+    if (result) {
+      next();
+      return;
+    }
+  }
+  res.send("fail");
+}
+
+/*
+ * This will find all of the items that are associated with
+ * an array id's.
+ * @param {[Number]} itemIds is the array of id's.
+ * @param {Object} res the responce sent back to the user.
+ */
+async function getItemsById(itemsIds, res) {
+  var items = [];
+  for (i in itemsIds) {
+    // find the item with the id
+    var curId = itemsIds[i];
+    const foundItem = await Item.findOne({ _id: curId });
+    items.push(foundItem);
+  }
+  res.send(items);
+}
+
+setInterval(cleanupSessions, 2000);
 
 /*
  * This is the code that gets ran whenever the server is

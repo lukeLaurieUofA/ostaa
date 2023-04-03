@@ -16,17 +16,40 @@ createButton = document.getElementById("postButton");
 username = "";
 findCurUser();
 
+/*
+ * The event listener on the create button which will make
+ * a post request to the server with the information about the
+ * item to be added.
+ */
 createButton.addEventListener("click", () => {
-  // makes the post request to the correct url
-  let curUrl = "http://localhost:80/add/item/" + username;
+  // saves image to db 
+  const formData = new FormData();
+  const fileInput = document.querySelector('input[type="file"]');
+  formData.append('image', fileInput.files[0]);
+  fetch('/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(responce => {
+    return responce.json();
+  }).then(data => {
+    // gets the file name for the image
+    var url = data.imageUrl.split("\\");
+    url = url[url.length - 1];
+    // makes the post request to the correct url
+  let curUrl = "add/item/" + username;
   let curData = {
     title: curTitle.value,
     description: curDescription.value,
-    image: curImage.value,
+    image: url,
     price: curPrice.value,
     stat: curStatus.value,
   };
   postRequest(curUrl, curData);
+  })
+  .catch(error => {
+    console.error('Error uploading image:', error);
+  });
   // sends back to main page
   window.location.href = "home.html";
 });
@@ -54,8 +77,13 @@ function postRequest(url, data) {
     });
 }
 
+/*
+ * The will use the cookies from the browser to find out who
+ * the current user is. If the user does not have cookies they
+ * will be rediected to the main page.
+ */
 function findCurUser() {
-  let url = "http://localhost:80/get/current/user";
+  let url = "get/current/user";
   fetch(url)
     .then((data) => {
       return data.text();

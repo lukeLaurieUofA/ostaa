@@ -13,7 +13,7 @@ var itemSchema = new Schema({
   description: String,
   image: String,
   price: Number,
-  stat: String
+  stat: String,
 });
 
 module.exports = mongoose.model("Item", itemSchema);
