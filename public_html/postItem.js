@@ -74,7 +74,7 @@ function postRequest(url, data) {
   })
     .then(() => {
       // sends back to main page
-      //window.location.href = "home.html";
+      window.location.href = "home.html";
     })
     .catch(() => {
       console.log("error");

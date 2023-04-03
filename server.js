@@ -179,7 +179,6 @@ app.post("/add/user/", (req, res) => {
  * @param {Object} res the responce sent back to the user.
  */
 app.post("/add/item/:USERNAME", (req, res) => {
-  console.log("in add item");
   let curUsername = req.params.USERNAME;
   let userData = req.body;
   // creates the new user
