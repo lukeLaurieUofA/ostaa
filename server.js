@@ -23,6 +23,7 @@ app.use("/app/*", authenticate);
 
 const Item = require("./Item.js");
 const User = require("./User.js");
+const { log } = require("console");
 
 sessions = {};
 
@@ -178,6 +179,7 @@ app.post("/add/user/", (req, res) => {
  * @param {Object} res the responce sent back to the user.
  */
 app.post("/add/item/:USERNAME", (req, res) => {
+  console.log("in add item");
   let curUsername = req.params.USERNAME;
   let userData = req.body;
   // creates the new user
@@ -276,6 +278,7 @@ app.post("/buy/item/:USERNAME", (req, res) => {
  * @param {Object} The function to be ran if cookie is valid.
  */
 app.post("/upload", upload.single("image"), (req, res) => {
+  console.log("in upload");
   const imageUrl = `http://157.230.181.102/${req.file.path}`;
   res.json({ imageUrl: imageUrl });
 });
