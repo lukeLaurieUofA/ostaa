@@ -31,11 +31,9 @@ createButton.addEventListener("click", () => {
     body: formData,
   })
     .then((responce) => {
-      console.log("with responce");
       return responce.json();
     })
     .then((data) => {
-      console.log("with url");
       // gets the file name for the image
       var url = data.imageUrl.split("\\");
       url = url[url.length - 1];
@@ -53,8 +51,6 @@ createButton.addEventListener("click", () => {
     .catch((error) => {
       console.error("Error uploading image:", error);
     });
-  // sends back to main page
-  // window.location.href = "home.html";
 });
 
 /*
@@ -73,7 +69,8 @@ function postRequest(url, data) {
     },
   })
     .then(() => {
-      console.log("success");
+      // sends back to main page
+      window.location.href = "home.html";
     })
     .catch(() => {
       console.log("error");
