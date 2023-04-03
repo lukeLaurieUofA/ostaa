@@ -301,6 +301,18 @@ app.delete("/everything", (req, res) => {
   });
 });
 
+  // deletes all users
+  User.deleteMany({}).then(() => {
+    // deletes all items
+    Item.deleteMany({})
+      .then(() => {
+        res.send("success");
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  });
+
 /*
  * This will get every item in either the items or the users
  * to be sent back to the user.
