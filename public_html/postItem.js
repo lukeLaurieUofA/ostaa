@@ -28,6 +28,7 @@ createButton.addEventListener("click", () => {
   if (fileInput.files.length > 0) {
     formData.append("image", fileInput.files[0]);
   } else {
+    alert("Please Choose A Picture");
     return;
   }
   fetch("/upload", {
