@@ -27,8 +27,8 @@ createButton.addEventListener("click", () => {
   const fileInput = document.querySelector('input[type="file"]');
   formData.append("image", fileInput.files[0]);
   // checks if file was inputted
-  console.log(fileInput.length);
-  if (fileInput.length < 3) {
+  console.log(fileInput.file.length);
+  if (fileInput.files.length === 0) {
     return;
   }
   fetch("/upload", {
