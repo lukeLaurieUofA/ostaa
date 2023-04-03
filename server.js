@@ -278,7 +278,6 @@ app.post("/buy/item/:USERNAME", (req, res) => {
  * @param {Object} The function to be ran if cookie is valid.
  */
 app.post("/upload", upload.single("image"), (req, res) => {
-  console.log("in upload");
   const imageUrl = `http://157.230.181.102/${req.file.path}`;
   res.json({ imageUrl: imageUrl });
 });

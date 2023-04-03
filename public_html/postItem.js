@@ -26,6 +26,10 @@ createButton.addEventListener("click", () => {
   const formData = new FormData();
   const fileInput = document.querySelector('input[type="file"]');
   formData.append("image", fileInput.files[0]);
+  // checks if file was inputted
+  if (fileInput == "") {
+    return;
+  }
   fetch("/upload", {
     method: "POST",
     body: formData,
@@ -37,7 +41,6 @@ createButton.addEventListener("click", () => {
       // gets the file name for the image
       var url = data.imageUrl.split("/");
       url = url[url.length - 1];
-      console.log(url);
       // makes the post request to the correct url
       let curUrl = "/add/item/" + username;
       let curData = {
