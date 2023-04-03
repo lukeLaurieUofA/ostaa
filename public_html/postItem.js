@@ -25,9 +25,9 @@ createButton.addEventListener("click", () => {
   // saves image to db
   const formData = new FormData();
   const fileInput = document.querySelector('input[type="file"]');
+  console.log(fileInput.file.length);
   formData.append("image", fileInput.files[0]);
   // checks if file was inputted
-  console.log(fileInput.file.length);
   if (fileInput.files.length === 0) {
     return;
   }
