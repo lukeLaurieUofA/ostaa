@@ -35,7 +35,7 @@ createButton.addEventListener("click", () => {
     })
     .then((data) => {
       // gets the file name for the image
-      var url = data.imageUrl.split("\\");
+      var url = data.imageUrl.split("/");
       url = url[url.length - 1];
       console.log(url);
       // makes the post request to the correct url
