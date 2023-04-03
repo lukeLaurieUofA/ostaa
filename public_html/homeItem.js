@@ -106,8 +106,8 @@ function displayItems(items, listType) {
     itemDescription.classList.add("itemDescription");
     itemPrice.classList.add("itemDescription");
     itemStatus.classList.add("itemDescription");
-    // itemImage.setAttribute("src", "/uploads/" + items[i].image);
-    // itemImage.setAttribute("alt", "item image");
+    itemImage.setAttribute("src", "/uploads/" + items[i].image);
+    itemImage.setAttribute("alt", "item image");
     // sets the values
     itemName.innerText = items[i].title;
     itemDescription.innerText = items[i].description;

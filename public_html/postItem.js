@@ -37,11 +37,11 @@ createButton.addEventListener("click", () => {
     var url = data.imageUrl.split("\\");
     url = url[url.length - 1];
     // makes the post request to the correct url
-  let curUrl = "add/item/" + username;
+  let curUrl = "/add/item/" + username;
   let curData = {
     title: curTitle.value,
     description: curDescription.value,
-    image: "url",
+    image: url,
     price: curPrice.value,
     stat: curStatus.value,
   };
