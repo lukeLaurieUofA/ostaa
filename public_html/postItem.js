@@ -41,7 +41,7 @@ createButton.addEventListener("click", () => {
   let curData = {
     title: curTitle.value,
     description: curDescription.value,
-    image: url,
+    image: "url",
     price: curPrice.value,
     stat: curStatus.value,
   };
